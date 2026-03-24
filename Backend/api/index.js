@@ -36,6 +36,7 @@ import connectDb from "../Config/db.js";
 // ROUTES
 import UserRoutes from "../Routes/UserRoutes.js" 
 import safeFoodRoutes from "../Routes/SafeFoodRoutes.js";
+import serverless from "serverless-http";
 
 dotenv.config();
 
@@ -93,3 +94,7 @@ const startServer = async () => {
 };
 
 startServer();
+
+
+export const handler = serverless(app);
+export default app;
