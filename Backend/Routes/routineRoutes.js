@@ -1,14 +1,5 @@
 import express from "express";
-// import {
-//   createRoutine,
-//   getRoutines,
-//   getRoutineById,
-//   updateRoutine,
-//   deleteRoutine,
-//   addStep,
-//   updateStep,
-//   deleteStep,
-// } from "../Controllers/routineController.js";
+
 import { createRoutine,getRoutines,getRoutineById,updateRoutine,deleteRoutine,addStep,updateStep,deleteStep } from "../Controllers/RoutineController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
