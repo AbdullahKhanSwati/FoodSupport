@@ -1,8 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
 
-// Initialize the Google Gen AI client
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 // Configure our system prompt
 const SYSTEM_PROMPT = `
 You are a compassionate, gentle food-support assistant for someone who might be struggling with eating or looking for safe foods.
@@ -22,6 +19,7 @@ Format exactly as:
 
 export const getFoodSuggestions = async (req, res) => {
   try {
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const { mealSize, temperature, foodType } = req.body;
 
     if (!mealSize || !temperature || !foodType) {
