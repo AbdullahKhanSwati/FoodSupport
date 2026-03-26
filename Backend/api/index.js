@@ -36,8 +36,8 @@ import connectDb from "../Config/db.js";
 // ROUTES
 import UserRoutes from "../Routes/UserRoutes.js" 
 import safeFoodRoutes from "../Routes/SafeFoodRoutes.js";
-import serverless from "serverless-http";
 import routineRoutes from "../Routes/routineRoutes.js";
+import aiRoutes from "../Routes/aiRoutes.js";
 
 dotenv.config();
 
@@ -58,6 +58,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/users", UserRoutes);
 app.use("/api/v1/safe-foods", safeFoodRoutes);
 app.use("/api/v1/routines", routineRoutes);
+app.use("/api/v1/ai", aiRoutes);
 
 // ================= 404 HANDLER =================
 app.use((req, res) => {
