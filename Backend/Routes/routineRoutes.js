@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createRoutine,getRoutines,getRoutineById,updateRoutine,deleteRoutine,addStep,updateStep,deleteStep } from "../Controllers/RoutineController.js";
+import { createRoutine,getRoutines,getRoutineById,updateRoutine,deleteRoutine,addStep,updateStep,deleteStep } from "../Controllers/routineController.js";
 import { requireSignin as protect } from "../Middlewares/AuthMiddlewares.js";
 
 const router = express.Router();
