@@ -26,7 +26,7 @@ const safeFoodSchema = new mongoose.Schema(
     recipe: {
       type: String,
       trim: true,
-      maxlength: [2000, "Recipe too long"],
+      maxlength: [5000, "Recipe too long"],
       default: "",
     },
 

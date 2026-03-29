@@ -11,7 +11,7 @@ Format exactly as:
   {
     "name": "Food Name",
     "description": "A very brief, gentle description making it sound manageable.",
-    "recipe": "A short, simple list of ingredients and basic instructions to prepare this.",
+    "recipe": "A detailed, step-by-step comprehensive recipe including ingredients and preparation instructions.",
     "type": "Solid/Liquid/Soft/etc",
     "temperature": "Hot/Cold/Warm/Frozen/etc"
   }
@@ -38,7 +38,7 @@ export const getFoodSuggestions = async (req, res) => {
       If temperature = 'Nothing', then anything is fine.)
     - Food Type Preference: ${foodType}
 
-    Please return a JSON array of 3 items. Include a short recipe/preparation guide for each.
+    Please return a JSON array of 3 items. Include a highly detailed, step-by-step recipe/preparation guide for each food so the user knows exactly how to make it.
     `;
 
     const response = await ai.models.generateContent({
