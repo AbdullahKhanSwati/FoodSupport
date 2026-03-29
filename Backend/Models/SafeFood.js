@@ -23,6 +23,13 @@ const safeFoodSchema = new mongoose.Schema(
       default: "",
     },
 
+    recipe: {
+      type: String,
+      trim: true,
+      maxlength: [2000, "Recipe too long"],
+      default: "",
+    },
+
     type: {
       type: String,
       enum: {

@@ -3,14 +3,15 @@ import { GoogleGenAI } from '@google/genai';
 // Configure our system prompt
 const SYSTEM_PROMPT = `
 You are a compassionate, gentle food-support assistant for someone who might be struggling with eating or looking for safe foods.
-The user wants exactly 10 food suggestions based perfectly on their parameters.
-If they ask for more, return 10 completely NEW & DIFFERENT suggestions than what they'd typically get.
+The user wants exactly 3 food suggestions based perfectly on their parameters.
+If they ask for more, return 3 completely NEW & DIFFERENT suggestions than what they'd typically get.
 Return ONLY valid JSON. No markdown backticks, no conversational text.
 Format exactly as:
 [
   {
     "name": "Food Name",
     "description": "A very brief, gentle description making it sound manageable.",
+    "recipe": "A short, simple list of ingredients and basic instructions to prepare this.",
     "type": "Solid/Liquid/Soft/etc",
     "temperature": "Hot/Cold/Warm/Frozen/etc"
   }
@@ -30,14 +31,14 @@ export const getFoodSuggestions = async (req, res) => {
     }
 
     const userInput = `
-    Generate 10 safe food ideas with these characteristics:
+    Generate 3 safe food ideas with these characteristics:
     - Meal Volume/Size: ${mealSize}
-    - Avoid these temperatures (if any): ${temperature} (Suggest things OUTSIDE of this temperature if they specified one to avoid, or stick to safe ones. Wait, the app asks "Would you like to avoid any temperatures?". 
+    - Avoid these temperatures (if any): ${temperature} (Suggest things OUTSIDE of this temperature if they specified one to avoid, or stick to safe ones.
       If temperature = 'Hot', do NOT suggest hot foods. Suggest cold/warm/frozen.
       If temperature = 'Nothing', then anything is fine.)
     - Food Type Preference: ${foodType}
 
-    Please return a JSON array of 10 items.
+    Please return a JSON array of 3 items. Include a short recipe/preparation guide for each.
     `;
 
     const response = await ai.models.generateContent({
