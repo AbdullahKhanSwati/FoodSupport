@@ -2,9 +2,9 @@ import express from "express";
 
 
 // import { protect, isAdmin } from "../middleware/authMiddleware.js";
- 
-import { registerUser,loginUser,getUserProfile,updateUser ,getAllUsers , deleteUser, deleteOwnAccount } from "../Controllers/UserController.js";
-import { isAdmin ,requireSignin } from "../Middlewares/AuthMiddlewares.js";
+
+import { registerUser, loginUser, getUserProfile, updateUser, getAllUsers, deleteUser, deleteOwnAccount } from "../Controllers/UserController.js";
+import { isAdmin, requireSignin } from "../Middlewares/AuthMiddlewares.js";
 
 const router = express.Router();
 

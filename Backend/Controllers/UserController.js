@@ -1,7 +1,7 @@
 import User from "../Models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { hashPassword,comparePassword } from "../Helpers/AuthHelper.js";
+import { hashPassword, comparePassword } from "../Helpers/AuthHelper.js";
 
 // ================= HELPER =================
 const generateToken = (user) => {
@@ -16,7 +16,7 @@ const generateToken = (user) => {
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-console.log("inside backend",name,email,password);
+    console.log("inside backend", name, email, password);
     // Validation
     if (!name || !email || !password) {
       return res.status(400).json({
