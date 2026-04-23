@@ -4,7 +4,7 @@ import SafeFood from "../Models/SafeFood.js";
 export const createSafeFood = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const { name, description, recipe, type, temperature, image } = req.body;
+    const { name, description, recipe, type, temperature, image, mealSize } = req.body;
 
     if (!userId) {
       return res.status(401).json({
@@ -37,6 +37,7 @@ export const createSafeFood = async (req, res) => {
       type,
       temperature,
       image,
+      mealSize,
     });
 
     return res.status(201).json({

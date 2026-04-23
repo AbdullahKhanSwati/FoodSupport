@@ -53,6 +53,15 @@ const safeFoodSchema = new mongoose.Schema(
       required: false // can store URL (Cloudinary etc.)
     },
 
+    mealSize: {
+      type: String,
+      enum: {
+        values: ["small", "medium", "large"],
+        message: "Meal size must be small, medium, or large",
+      },
+      default: "medium",
+    },
+
     isFavorite: {
       type: Boolean,
       default: false,
