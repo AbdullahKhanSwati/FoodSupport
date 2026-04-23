@@ -1,10 +1,14 @@
 import { GoogleGenAI } from '@google/genai';
+import SafeFood from '../Models/SafeFood.js';
 
 // Configure our system prompt
 const SYSTEM_PROMPT = `
 You are a compassionate, gentle food-support assistant for someone who might be struggling with eating or looking for safe foods.
-The user wants exactly 3 food suggestions based perfectly on their parameters.
-If they ask for more, return 3 completely NEW & DIFFERENT suggestions than what they'd typically get.
+The user wants exactly 8 food suggestions based perfectly on their parameters.
+You will also be provided with the user's list of previously saved "safe foods" — foods they already trust and enjoy.
+Use these saved foods as strong inspiration: recommend foods that share similar ingredients, textures, flavor profiles, preparation styles, or emotional feel as the saved ones.
+Do NOT simply repeat the saved foods — suggest NEW foods that feel familiar and comfortable given what they already eat.
+If the user has no saved foods yet, base suggestions purely on their chosen parameters.
 Return ONLY valid JSON. No markdown backticks, no conversational text.
 Format exactly as:
 [
@@ -22,6 +26,7 @@ export const getFoodSuggestions = async (req, res) => {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const { mealSize, temperature, foodType } = req.body;
+    const userId = req.user?.id;
 
     if (!mealSize || !temperature || !foodType) {
       return res.status(400).json({
@@ -30,15 +35,36 @@ export const getFoodSuggestions = async (req, res) => {
       });
     }
 
+    // Fetch user's saved safe foods to use as inspiration
+    const savedFoods = await SafeFood.find({ userId })
+      .select('name description type temperature mealSize')
+      .sort({ isFavorite: -1, createdAt: -1 })
+      .limit(50)
+      .lean();
+
+    const savedFoodsContext = savedFoods.length
+      ? savedFoods
+          .map(
+            (f, i) =>
+              `${i + 1}. ${f.name} — ${f.type}, ${f.temperature}${
+                f.description ? ` (${f.description})` : ''
+              }`
+          )
+          .join('\n')
+      : 'The user has not saved any foods yet.';
+
     const userInput = `
-    Generate 3 safe food ideas with these characteristics:
+    Generate 8 safe food ideas with these characteristics:
     - Meal Volume/Size: ${mealSize}
     - Avoid these temperatures (if any): ${temperature} (Suggest things OUTSIDE of this temperature if they specified one to avoid, or stick to safe ones.
       If temperature = 'Hot', do NOT suggest hot foods. Suggest cold/warm/frozen.
       If temperature = 'Nothing', then anything is fine.)
     - Food Type Preference: ${foodType}
 
-    Please return a JSON array of 3 items. Include a highly detailed, step-by-step recipe/preparation guide for each food so the user knows exactly how to make it.
+    The user's previously saved safe foods (use these as strong inspiration for style, texture, and comfort level — but suggest NEW foods, do not just repeat these):
+    ${savedFoodsContext}
+
+    Please return a JSON array of 8 items. Each suggestion should feel familiar and comfortable to someone who eats the saved foods listed above. Include a highly detailed, step-by-step recipe/preparation guide for each food so the user knows exactly how to make it.
     `;
 
     const response = await ai.models.generateContent({
@@ -46,13 +72,13 @@ export const getFoodSuggestions = async (req, res) => {
       contents: userInput,
       config: {
         systemInstruction: SYSTEM_PROMPT,
-        temperature: 0.7, // Add some randomness for "Show More" variety
+        temperature: 0.7,
         responseMimeType: "application/json",
       }
     });
 
     const text = response.text;
-    
+
     // Parse the JSON safely
     let suggestions = [];
     try {
