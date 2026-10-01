@@ -5,7 +5,7 @@ import SafeFood from '../Models/SafeFood.js';
 const SYSTEM_PROMPT = `
 You are a compassionate, gentle food-support assistant for someone who might be struggling with eating or looking for safe foods.
 The user wants exactly 8 food suggestions based perfectly on their parameters.
-You will also be provided with the user's list of previously saved "safe foods" — foods they already trust and enjoy.
+You will also be provided with the user's list of previously saved "safe foods", — foods they already trust and enjoy.
 Use these saved foods as strong inspiration: recommend foods that share similar ingredients, textures, flavor profiles, preparation styles, or emotional feel as the saved ones.
 Do NOT simply repeat the saved foods — suggest NEW foods that feel familiar and comfortable given what they already eat.
 If the user has no saved foods yet, base suggestions purely on their chosen parameters.
@@ -44,13 +44,12 @@ export const getFoodSuggestions = async (req, res) => {
 
     const savedFoodsContext = savedFoods.length
       ? savedFoods
-          .map(
-            (f, i) =>
-              `${i + 1}. ${f.name} — ${f.type}, ${f.temperature}${
-                f.description ? ` (${f.description})` : ''
-              }`
-          )
-          .join('\n')
+        .map(
+          (f, i) =>
+            `${i + 1}. ${f.name} — ${f.type}, ${f.temperature}${f.description ? ` (${f.description})` : ''
+            }`
+        )
+        .join('\n')
       : 'The user has not saved any foods yet.';
 
     const userInput = `
@@ -87,9 +86,9 @@ export const getFoodSuggestions = async (req, res) => {
       // Fallback regex cleaning if the model wraps it in Markdown
       const jsonMatch = text.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
-         suggestions = JSON.parse(jsonMatch[0]);
+        suggestions = JSON.parse(jsonMatch[0]);
       } else {
-         throw new Error("Could not parse JSON from AI response");
+        throw new Error("Could not parse JSON from AI response");
       }
     }
 
